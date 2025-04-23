@@ -37,8 +37,3 @@ http://localhost:8080/swagger-ui/index.html
 - **Modelos**: Contém as entidades do sistema (`Personagem`, `Classe`).
 - **Repositórios**: Interfaces para acesso ao banco de dados (`PersonagemRepository`).
 - **Configurações**: Configuração do Swagger e outras dependências.
-
-## Como Executar
-1. Clone o repositório:
-   ```bash
-   git clone <url-do-repositorio>
