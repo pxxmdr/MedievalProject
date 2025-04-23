@@ -1,8 +1,8 @@
 package com.marketSkyrim.model;
 
 public enum Tipo {
-    Arma,
-    Armadura,
-    Pocao,
-    Acessorio
+    ARMA,
+    ARMADURA,
+    POCAO,
+    ACESSORIO
 }
