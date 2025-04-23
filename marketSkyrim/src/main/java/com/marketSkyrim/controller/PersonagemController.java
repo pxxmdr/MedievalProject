@@ -23,6 +23,8 @@ import com.marketSkyrim.model.Classe;
 import com.marketSkyrim.model.Personagem;
 import com.marketSkyrim.repository.PersonagemRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/personagem")
 @CrossOrigin(origins = "*")
@@ -31,11 +33,13 @@ public class PersonagemController {
     @Autowired
     private PersonagemRepository personagemRepository;
 
+    @Operation(summary = "Cria um novo personagem")
     @PostMapping
     public ResponseEntity<Personagem> createPersonagem(@RequestBody Personagem personagem) {
         return ResponseEntity.status(HttpStatus.CREATED).body(personagemRepository.save(personagem));
     }
 
+    @Operation(summary = "Busca personagem por ID")
     @GetMapping("/{id}")
     public ResponseEntity<Personagem> getPersonagemById(@PathVariable Long id) {
         return personagemRepository.findById(id)
@@ -43,11 +47,13 @@ public class PersonagemController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personagem não encontrado"));
     }
 
+    @Operation(summary = "Lista todos os personagens paginados")
     @GetMapping
     public ResponseEntity<Page<Personagem>> getAllPersonagens(Pageable pageable) {
         return ResponseEntity.ok(personagemRepository.findAll(pageable));
     }
 
+    @Operation(summary = "Atualiza um personagem existente")
     @PutMapping("/{id}")
     public ResponseEntity<Personagem> updatePersonagem(@PathVariable Long id, @RequestBody Personagem personagemDetails) {
         return personagemRepository.findById(id)
@@ -61,6 +67,7 @@ public class PersonagemController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Personagem não encontrado"));
     }
 
+    @Operation(summary = "Deleta um personagem")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePersonagem(@PathVariable Long id) {
         if (!personagemRepository.existsById(id)) {
@@ -70,12 +77,13 @@ public class PersonagemController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @Operation(summary = "Busca personagens por nome")
     @GetMapping("/buscar/nome")
     public ResponseEntity<List<Personagem>> buscarPorNome(@RequestParam String nome) {
         return ResponseEntity.ok(personagemRepository.findByNomeIgnoreCase(nome));
     }
 
+    @Operation(summary = "Busca personagens por classe")
     @GetMapping("/buscar/classe")
     public ResponseEntity<List<Personagem>> buscarPorClasse(@RequestParam Classe classe) {
         return ResponseEntity.ok(personagemRepository.findByClasse(classe));

@@ -26,6 +26,9 @@ import com.marketSkyrim.model.Tipo;
 import com.marketSkyrim.repository.ItemRepository;
 import com.marketSkyrim.repository.PersonagemRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+
 @RestController
 @RequestMapping("/item")
 @CrossOrigin(origins = "*")
@@ -37,6 +40,7 @@ public class ItemController {
     @Autowired
     private PersonagemRepository personagemRepository;
 
+    @Operation(summary = "Cria um novo item")
     @PostMapping
     public ResponseEntity<Item> criarItem(@RequestBody Item item) {
         if (item.getDono() != null) {
@@ -48,6 +52,7 @@ public class ItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(itemRepository.save(item));
     }
 
+    @Operation(summary = "Busca item por ID")
     @GetMapping("/{id}")
     public ResponseEntity<Item> buscarPorId(@PathVariable Long id) {
         return itemRepository.findById(id)
@@ -55,11 +60,13 @@ public class ItemController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Item não encontrado"));
     }
 
+    @Operation(summary = "Lista todos os itens paginados")
     @GetMapping
     public ResponseEntity<Page<Item>> listarTodos(Pageable pageable) {
         return ResponseEntity.ok(itemRepository.findAll(pageable));
     }
 
+    @Operation(summary = "Atualiza um item existente")
     @PutMapping("/{id}")
     public ResponseEntity<Item> atualizarItem(@PathVariable Long id, @RequestBody Item itemDetalhes) {
         return itemRepository.findById(id)
@@ -81,6 +88,7 @@ public class ItemController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Item não encontrado"));
     }
 
+    @Operation(summary = "Deleta um item por ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarItem(@PathVariable Long id) {
         if (!itemRepository.existsById(id)) {
@@ -90,27 +98,29 @@ public class ItemController {
         return ResponseEntity.noContent().build();
     }
 
-    // Filtros
+    @Operation(summary = "Busca itens por nome")
     @GetMapping("/buscar/nome")
     public ResponseEntity<List<Item>> buscarPorNome(@RequestParam String nome) {
         return ResponseEntity.ok(itemRepository.findByNomeContainingIgnoreCase(nome));
     }
 
+    @Operation(summary = "Busca itens por tipo")
     @GetMapping("/buscar/tipo")
     public ResponseEntity<List<Item>> buscarPorTipo(@RequestParam Tipo tipo) {
         return ResponseEntity.ok(itemRepository.findByTipo(tipo));
     }
 
+    @Operation(summary = "Busca itens por raridade")
     @GetMapping("/buscar/raridade")
     public ResponseEntity<List<Item>> buscarPorRaridade(@RequestParam Raridade raridade) {
         return ResponseEntity.ok(itemRepository.findByRaridade(raridade));
     }
 
+    @Operation(summary = "Busca itens por faixa de preço")
     @GetMapping("/buscar/preco")
     public ResponseEntity<List<Item>> buscarPorFaixaDePreco(
-            @RequestParam int min,
-            @RequestParam int max
-    ) {
+            @Parameter(description = "Preço mínimo") @RequestParam int min,
+            @Parameter(description = "Preço máximo") @RequestParam int max) {
         return ResponseEntity.ok(itemRepository.findByPrecoBetween(min, max));
     }
 }

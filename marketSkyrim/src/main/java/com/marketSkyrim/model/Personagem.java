@@ -12,26 +12,34 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Entity
 @Getter
 @Setter
+@Schema(description = "Entidade que representa um personagem do jogo")
 public class Personagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID do personagem", example = "1")
     private Long id;
 
-    @NotNull(message = "Nome não pode ser nulo")
+    @NotNull
+    @Schema(description = "Nome do personagem", example = "Alduin")
     private String nome;
 
-    @Min(value = 1, message = "Nível deve ser maior que 0")
-    @Max(value = 99, message = "Nível deve ser menor que 99")
+    @Min(1)
+    @Max(99)
+    @Schema(description = "Nível do personagem", example = "30")
     private int nivel;
 
-    @Min(value = 0, message = "O saldo de Moeda não pode ser negativo")
+    @Min(0)
+    @Schema(description = "Moedas do personagem", example = "1000")
     private int moeda;
 
-    @NotNull(message = "Classe não pode ser nula")
+    @NotNull
     @Enumerated(EnumType.STRING)
+    @Schema(description = "Classe do personagem", example = "MAGO")
     private Classe classe;
 }
