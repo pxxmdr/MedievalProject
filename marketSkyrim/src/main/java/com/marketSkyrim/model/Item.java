@@ -6,7 +6,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Max;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,23 +15,26 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Personagem {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Nome não pode ser nulo")
+    @NotNull(message = "O nome não pode ser nulo.")
     private String nome;
 
-    @Min(value = 1, message = "Nível deve ser maior que 0")
-    @Max(value = 99, message = "Nível deve ser menor que 99")
-    private int nivel;
+    @Min(value = 0, message = "O valor não pode ser negativo")
+    private int preco;
 
-    @Min(value = 0, message = "O saldo de Moeda não pode ser negativo")
-    private int moeda;
-
-    @NotNull(message = "Classe não pode ser nula")
+    @NotNull(message = "Tipo não pode ser nulo")
     @Enumerated(EnumType.STRING)
-    private Classe classe;
+    private Tipo tipo;
+
+    @NotNull(message = "Raridade não pode ser nula")
+    @Enumerated(EnumType.STRING)
+    private Raridade raridade;
+
+    @ManyToOne
+    private Personagem dono;
 }
